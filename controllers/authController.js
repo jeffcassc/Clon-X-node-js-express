@@ -50,3 +50,5 @@ const register = async (req,res)=>{
         res.status(500).json({message: 'Error en el servidor'});
     }
 }
+
+export { register }
