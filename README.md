@@ -1,3 +1,3 @@
-# Clon-X-node-js-express
+#  Twitter Clone - MERN Stack
 
-usando mern
+Un clon de Twitter/X construido con MERN Stack (MongoDB, Express, React, Node.js) para practicar desarrollo fullstack.
