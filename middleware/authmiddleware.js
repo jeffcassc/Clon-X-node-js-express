@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken'
 import User from '../models/User.js'
 
 const protect = async (req,res,next)=>{
@@ -18,13 +18,13 @@ const protect = async (req,res,next)=>{
             }
             next()
         } catch (error) {
-            console.error('Error en autenticación:', error.message);
-            res.status(401).json({ message: 'Token no válido' });
+            console.error('Error en autenticación:', error.message)
+            res.status(401).json({ message: 'Token no válido' })
         }
         
     }
     if (!token) {
-        res.status(401).json({ message: 'No autorizado, token no encontrado' });
+        res.status(401).json({ message: 'No autorizado, token no encontrado' })
     }
 }
 

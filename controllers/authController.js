@@ -46,8 +46,8 @@ const register = async (req,res)=>{
             token: generateToken(user._id)
         })
     } catch (error) {
-        console.error('Error en registro:', error);
-        res.status(500).json({message: 'Error en el servidor'});
+        console.error('Error en registro:', error)
+        res.status(500).json({message: 'Error en el servidor'})
     }
 }
 
@@ -90,9 +90,34 @@ const login = async (req,res)=>{
 
 
     } catch (error) {
-        console.error('Error en login:', error);
-        res.status(500).json({message: 'Error en el servidor'});
+        console.error('Error en login:', error)
+        res.status(500).json({message: 'Error en el servidor'})
     }
 }
 
-export { register, login }
+const getMe = async (req, res)=>{
+    try {
+        const user = await User.findById(req.user._id)
+            .populate('followers', 'username displayName avatar')
+            .populate('following', 'username displayName avatar')
+
+        res.json({
+            _id: user._id,
+            username: user.username,
+            email: user.email,
+            displayName: user.displayName,
+            avatar: user.avatar,
+            bio: user.bio,
+            coverImage: user.coverImage,
+            followers: user.followers,
+            following: user.following,
+            createdAt: user.createdAt
+        });
+
+    } catch (error) {
+        console.error('Error obteniendo usuario:', error)
+        res.status(500).json({ message: 'Error en el servidor' })
+    }
+}
+
+export { register, login, getMe }
