@@ -61,10 +61,49 @@ const updateProfile = async (req,res)=>{
         res.status(500).json({ message: 'Error en el servidor' })
     }
 }
-const followUser = async ()=>{}
+
+const followUser = async (req,res)=>{
+    try {
+        const userToFollow = await User.findById(req.params.id)
+        const currentUser = await User.findById(req.user._id)
+
+        if(!userToFollow){
+            return res.status(400).json({
+                message: 'Usuario no encontrado'
+            })
+        }
+
+        if(req.params.id === req.user._id.toString()){
+            return res.status(400).json({
+                message: 'No puedes seguirte a ti mismo'
+            })
+        }
+
+        if(currentUser.following.includes(req.params.id)){
+            return res.status(400).json({
+                message: 'ya sigues a este usuario'
+            })
+        }
+
+        currentUser.following.push(req.params.id)
+        await currentUser.save()
+
+        userToFollow.followers.push(req.user._id)
+        await userToFollow.save()
+
+        res.json({
+            message: 'Usuario seguido exitosamente',
+            following: currentUser.following.length
+        })
+
+    } catch (error) {
+        console.error('Error siguiendo usuario:', error)
+        res.status(500).json({ message: 'Error en el servidor' })
+    }
+}
 const unFollowUser = async ()=>{}
 const searchUsers = async ()=>{}
 const getSuggestedUsers = async ()=>{
 }
 
-export {getUserProfile, updateProfile }
+export {getUserProfile, updateProfile, followUser }
