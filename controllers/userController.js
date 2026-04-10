@@ -138,8 +138,29 @@ const unFollowUser = async (req,res)=>{
         res.status(500).json({ message: 'Error en el servidor' })
     }
 }
-const searchUsers = async ()=>{}
+const searchUsers = async (req,res)=>{
+    try {
+        const {q} = req.query
+        if(!q){
+            return res.json([])
+        }
+
+        const users = await User.find({
+            $or: [
+                {username:{$regex: q, $options: 'i'}},
+                {displayName:{$regex: q, $options: 'i'}}
+            ]
+        })
+            .select('username displayname avatar bio')
+            .limit(5)
+        res.json(users)
+
+    } catch (error) {
+        console.error('Error de busqueda de usuarios:', error)
+        res.status(500).json({ message: 'Error en el servidor' })
+    }
+}
 const getSuggestedUsers = async ()=>{
 }
 
-export {getUserProfile, updateProfile, followUser, unFollowUser }
+export {getUserProfile, updateProfile, followUser, unFollowUser, searchUsers }
