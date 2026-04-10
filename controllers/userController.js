@@ -160,7 +160,26 @@ const searchUsers = async (req,res)=>{
         res.status(500).json({ message: 'Error en el servidor' })
     }
 }
-const getSuggestedUsers = async ()=>{
+const getSuggestedUsers = async (req, res)=>{
+    try {
+        const currentUser = await User.findById(req.user._id)
+
+        const user = await User.find({
+            _id: {
+                $ne: req.user._id,
+                $nin: currentUser.following
+            }
+        })
+            .select(' username display avatar bio')
+            .limit(5)
+
+        res.json(user)
+
+    } catch (error) {
+
+        console.error('Error obteniedo sugerencias', error)
+        res.status(500).json({ message: 'Error en el servidor' })
+    }
 }
 
-export {getUserProfile, updateProfile, followUser, unFollowUser, searchUsers }
+export {getUserProfile, updateProfile, followUser, unFollowUser, searchUsers, getSuggestedUsers }
