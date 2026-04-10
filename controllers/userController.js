@@ -101,9 +101,45 @@ const followUser = async (req,res)=>{
         res.status(500).json({ message: 'Error en el servidor' })
     }
 }
-const unFollowUser = async ()=>{}
+const unFollowUser = async (req,res)=>{
+    try {
+        const userToFollow = await User.findById(req.params.id)
+        const currentUser = await User.findById(req.user._id)
+
+        if(!userToFollow){
+            return res.status(400).json({
+                message: 'Usuario no encontrado'
+            })
+        }
+
+        if(!currentUser.following.includes(req.params.id)){
+            return res.status(400).json({
+                message: 'No sigues a este usuario'
+            })
+        }
+
+        currentUser.following = currentUser.followers.filter(
+            id => id.toString() !== req.params.id
+        )
+        await currentUser.save()
+
+        userToFollow.followers = userToFollow.followers.filter(
+            id => id.toString() !== req.user._id.toString()
+        )
+        await userToFollow.save()
+
+        res.json({
+            message: 'Usuario dejado de seguir exitosamente',
+            following: currentUser.following.length
+        })
+
+    } catch (error) {
+        console.error('Error dejado de usuario:', error)
+        res.status(500).json({ message: 'Error en el servidor' })
+    }
+}
 const searchUsers = async ()=>{}
 const getSuggestedUsers = async ()=>{
 }
 
-export {getUserProfile, updateProfile, followUser }
+export {getUserProfile, updateProfile, followUser, unFollowUser }
