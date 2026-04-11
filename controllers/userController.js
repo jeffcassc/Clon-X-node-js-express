@@ -151,7 +151,7 @@ const searchUsers = async (req,res)=>{
                 {displayName:{$regex: q, $options: 'i'}}
             ]
         })
-            .select('username displayname avatar bio')
+            .select('username displayName avatar bio')
             .limit(5)
         res.json(users)
 
@@ -170,7 +170,7 @@ const getSuggestedUsers = async (req, res)=>{
                 $nin: currentUser.following
             }
         })
-            .select(' username display avatar bio')
+            .select(' username displayName avatar bio')
             .limit(5)
 
         res.json(user)

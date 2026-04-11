@@ -3,6 +3,7 @@ import dotenv from "dotenv"
 import connectDB from "./config/db.js"
 import authRoutes from "./routes/authRoutes.js"
 import userRoutes from './routes/userRoutes.js'
+import tweetRoutes from './routes/tweetRoutes.js'
 
 dotenv.config()
 const app = express()
@@ -25,6 +26,7 @@ app.get('/', (req,res)=>{
 
 app.use('/api/auth', authRoutes)
 app.use('/api/user', userRoutes)
+app.use('/api/tweets', tweetRoutes)
 
 app.listen(PORT, () => {
     console.log(`

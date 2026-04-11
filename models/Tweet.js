@@ -41,6 +41,6 @@ const tweetSchema = new mongoose.Schema({
 
 tweetSchema.index({ createdAt: -1 })
 
-const tweet = mongoose.model('tweet', tweetSchema)
+const Tweet = mongoose.model('tweet', tweetSchema)
 
-export default tweet
+export default Tweet
