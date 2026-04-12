@@ -21,7 +21,34 @@ const createTweet = async (req,res)=>{
         res.status(500).json({ message: 'Error en el servidor' })
     }
 }
-const getTweets = async ()=>{}
+const getTweets = async (req,res)=>{
+    try {
+        const page = parseInt(req.query.page) || 1
+        const limit = parseInt(req.query.limit) || 20
+        const skip = (page - 1) * limit
+
+        const tweets = await Tweet.find()
+            .populate('author', 'username displayName avatar')
+            .populate('comments.user', 'username displayName avatar')
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit)
+
+        const total = await Tweet.countDocuments()
+
+        res.json({
+            tweets,
+            page,
+            pages: Math.ceil(total/limit),
+            total
+        })
+            
+        
+    } catch (error) {
+        console.error('Error obteniedo tweets:', error)
+        res.status(500).json({ message: 'Error en el servidor' })
+    }
+}
 const getTweetById = async ()=>{}
 const getUserTweets = async ()=>{}
 const deleteTweet = async ()=>{}
