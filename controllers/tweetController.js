@@ -49,7 +49,25 @@ const getTweets = async (req,res)=>{
         res.status(500).json({ message: 'Error en el servidor' })
     }
 }
-const getTweetById = async ()=>{}
+const getTweetById = async (req,res)=>{
+    try {
+        const tweet = await Tweet.findById(req.params.id)
+            .populate('author', 'username displayName avatar')
+            .populate('comments.user', 'username displayName avatar')
+            .populate('likes', 'username displayName avatar')
+
+        if(!tweet){
+            return res.status(400).json({
+                message: 'tweet no encontrado'
+            })
+        }
+
+        res.json(tweet)
+    } catch (error) {
+        console.error('Error obteniedo tweet:', error)
+        res.status(500).json({ message: 'Error en el servidor' })
+    }
+}
 const getUserTweets = async ()=>{}
 const deleteTweet = async ()=>{}
 const toggleLike = async ()=>{}
