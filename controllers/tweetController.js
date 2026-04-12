@@ -68,7 +68,20 @@ const getTweetById = async (req,res)=>{
         res.status(500).json({ message: 'Error en el servidor' })
     }
 }
-const getUserTweets = async ()=>{}
+const getUserTweets = async (req, res)=>{
+    try {
+        const tweets = await Tweet.find({author: req.params.userId})
+            .populate('author','username displayName avatar' )
+            .populate('comments.user','username displayName avatar' )
+            .sort({ createdAt: -1 })
+    
+        res.json(tweets)
+
+    } catch (error) {
+        console.error('Error obteniedo tweets:', error)
+        res.status(500).json({ message: 'Error en el servidor' })
+    }
+}
 const deleteTweet = async ()=>{}
 const toggleLike = async ()=>{}
 const addComment = async ()=>{}
