@@ -82,7 +82,32 @@ const getUserTweets = async (req, res)=>{
         res.status(500).json({ message: 'Error en el servidor' })
     }
 }
-const deleteTweet = async ()=>{}
+const deleteTweet = async (req,res)=>{
+    try {
+        const tweet = await Tweet.findById(req.params.id)
+        if(!tweet){
+            return res.status(404).json({
+                message: 'Tweet no encontrado'
+            })
+        }
+
+        if(tweet.author.toString() !== req.user._id.toString()){
+            return res.status(401).json({
+                message: 'No autorizado'
+            })
+        }
+
+        await Tweet.findByIdAndDelete(req.params.id)
+
+        res.json({
+            message: 'Tweet eliminado'
+        })
+
+    } catch (error) {
+        console.error('Error eliminando tweet:', error)
+        res.status(500).json({ message: 'Error en el servidor' })
+    }
+}
 const toggleLike = async ()=>{}
 const addComment = async ()=>{}
 const deleteComment = async ()=>{}
