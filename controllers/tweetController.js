@@ -108,7 +108,34 @@ const deleteTweet = async (req,res)=>{
         res.status(500).json({ message: 'Error en el servidor' })
     }
 }
-const toggleLike = async ()=>{}
+const toggleLike = async (req,res)=>{
+    try {
+        const tweet = await Tweet.findById(req.params.id)
+        if(!tweet){
+            return res.status(404).json({
+                message: 'Tweet no encontrado'
+            })
+        }
+        const likeIndex = await tweet.likes.findIndex(
+            id => id.toString() === req.user._id.toString()
+        )
+
+        if(likeIndex > -1){
+            tweet.likes.splice(likeIndex, 1)
+        }else{
+            tweet.likes.push(req.user._id)
+        }
+
+        await tweet.save()
+        res.json({
+            likes: tweet.likes.length,
+            isLiked: likeIndex === -1
+        })
+    } catch (error) {
+        console.error('Error en like:', error)
+        res.status(500).json({ message: 'Error en el servidor' })
+    }
+}
 const addComment = async ()=>{}
 const deleteComment = async ()=>{}
 const getFeed = async ()=>{}
