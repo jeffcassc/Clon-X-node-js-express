@@ -197,7 +197,35 @@ const deleteComment = async (req,res)=>{
         res.status(500).json({ message: 'Error en el servidor' })
     }
 }
-const getFeed = async ()=>{}
+const getFeed = async (req,res)=>{
+    try {
+        const page = parseInt(req.query.page) || 1
+        const limit = parseInt(req.query.limit) || 20
+        const skip = (page - 1) * limit
+
+        const tweets = await Tweet.find({
+            $or: [
+                {author: req.user._id},
+                {author: {$in: req.user.following}}
+            ]
+        })
+            .populate('author', 'username displayName avatar')
+            .populate('comments.user', 'username displayName avatar')
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit)
+
+
+        res.json({
+            tweets
+        })
+            
+        
+    } catch (error) {
+        console.error('Error obteniedo feed:', error)
+        res.status(500).json({ message: 'Error en el servidor' })
+    }
+}
 
 export {
     createTweet,
