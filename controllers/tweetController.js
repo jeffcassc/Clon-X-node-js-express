@@ -168,7 +168,35 @@ const addComment = async (req,res)=>{
         res.status(500).json({ message: 'Error en el servidor' })
     }
 }
-const deleteComment = async ()=>{}
+const deleteComment = async (req,res)=>{
+    try {
+        const tweet = await Tweet.findById(req.params.id)
+        if(!tweet){
+            return res.status(404).json({
+                message: 'Tweet no encontrado'
+            })
+        }
+
+        const comment = tweet.comments.id(req.params.commentId)
+        if(!comment){
+            return res.status(404).json({
+                message: 'Comentario no encontrado'
+            })
+        }
+        if(comment.user.toString() !== req.user._id.toString()){
+            return res.status(401).json({
+                message: 'No autorizado'
+            })
+        }
+        tweet.comments.pull(req.params.commentId)
+        await tweet.save()
+
+        res.json({message: 'comentario eliminado'})
+    } catch (error) {
+        console.error('Error eliminando comentario:', error)
+        res.status(500).json({ message: 'Error en el servidor' })
+    }
+}
 const getFeed = async ()=>{}
 
 export {
