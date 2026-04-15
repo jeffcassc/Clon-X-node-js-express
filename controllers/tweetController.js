@@ -160,7 +160,7 @@ const addComment = async (req,res)=>{
         tweet.comments.push(comment)
         await tweet.save()
 
-        await tweet.populate('comments.user', 'username displayname avatar')
+        await tweet.populate('comments.user', 'username displayName avatar')
         res.status(201).json(tweet.comments)
 
     } catch (error) {
