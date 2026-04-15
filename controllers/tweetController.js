@@ -136,7 +136,38 @@ const toggleLike = async (req,res)=>{
         res.status(500).json({ message: 'Error en el servidor' })
     }
 }
-const addComment = async ()=>{}
+const addComment = async (req,res)=>{
+    try {
+        const { content }= req.body 
+        if(!content || content.trim() === ''){
+            return res.status(400).json({
+                message: 'El contenido es requerido'
+            })
+        }
+
+        const tweet = await Tweet.findById(req.params.id)
+        if(!tweet){
+            return res.status(404).json({
+                message: 'Tweet no encontrado'
+            })
+        }
+
+        const comment = {
+            user: req.user._id,
+            content
+        }
+
+        tweet.comments.push(comment)
+        await tweet.save()
+
+        await tweet.populate('comments.user', 'username displayname avatar')
+        res.status(201).json(tweet.comments)
+
+    } catch (error) {
+        console.error('Error añadiendo comentario:', error)
+        res.status(500).json({ message: 'Error en el servidor' })
+    }
+}
 const deleteComment = async ()=>{}
 const getFeed = async ()=>{}
 
