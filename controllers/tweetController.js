@@ -57,8 +57,8 @@ const getTweetById = async (req,res)=>{
             .populate('likes', 'username displayName avatar')
 
         if(!tweet){
-            return res.status(400).json({
-                message: 'tweet no encontrado'
+            return res.status(404).json({
+                message: 'Tweet no encontrado'
             })
         }
 
@@ -116,7 +116,7 @@ const toggleLike = async (req,res)=>{
                 message: 'Tweet no encontrado'
             })
         }
-        const likeIndex = await tweet.likes.findIndex(
+        const likeIndex = tweet.likes.findIndex(
             id => id.toString() === req.user._id.toString()
         )
 
@@ -216,9 +216,7 @@ const getFeed = async (req,res)=>{
             .limit(limit)
 
 
-        res.json({
-            tweets
-        })
+        res.json(tweets)
             
         
     } catch (error) {

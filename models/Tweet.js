@@ -4,7 +4,7 @@ const tweetSchema = new mongoose.Schema({
     content:{
         type: String,
         required: [true, 'El contenido es requerido'],
-        maxlength: [280, 'El tweet no puede alcanzar los 280 caracteres']
+        maxlength: [280, 'El tweet no puede superar los 280 caracteres']
     },
     author:{
         type: mongoose.Schema.Types.ObjectId,
@@ -24,7 +24,7 @@ const tweetSchema = new mongoose.Schema({
         content:{
             type: String,
             required: [true, 'El contenido es requerido'],
-            maxlength: [280, 'El tweet no puede alcanzar los 280 caracteres']
+            maxlength: [280, 'El tweet no puede superar los 280 caracteres']
         },
         createdAt:{
             type: Date,
