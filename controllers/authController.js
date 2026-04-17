@@ -112,7 +112,7 @@ const getMe = async (req, res)=>{
             followers: user.followers,
             following: user.following,
             createdAt: user.createdAt
-        });
+        })
 
     } catch (error) {
         console.error('Error obteniendo usuario:', error)
