@@ -53,7 +53,20 @@ const getBookmarks = async (req,res)=>{
         res.status(500).json({ message: 'Error en el servidor' })
     }
 }
-const checkBookmark = async ()=>{}
+const checkBookmark = async (req,res)=>{
+    try {
+        const bookmark = await Bookmark.findOne({
+            user: req.user._id,
+            tweet: req.params.tweetId
+        })
+
+        res.json({ bookmarked: !!bookmark })
+
+    } catch (error) {
+        console.error('Error verificando Bookmark:', error)
+        res.status(500).json({ message: 'Error en el servidor' })
+    }
+}
 
 
 export { toggleBookmark, getBookmarks, checkBookmark }
