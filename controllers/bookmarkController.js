@@ -1,5 +1,5 @@
 import Bookmark from "../models/BookMark.js";
-import Tweet from "../models/Tweet.js"
+import Tweet from "../models/Tweet.js";
 
 const toggleBookmark = async (req,res)=>{
     try {
@@ -31,7 +31,28 @@ const toggleBookmark = async (req,res)=>{
         res.status(500).json({ message: 'Error en el servidor' })
     }
 }
-const getBookmarks = async ()=>{}
+const getBookmarks = async (req,res)=>{
+    try {
+        const bookmark = await Bookmark.find({ user: req.user._id })
+            .populate({
+                path: 'tweet',
+                populate: {
+                    path: 'author',
+                    select: 'username displayName avatar'
+                }
+            })
+            .sort({ createdAt: -1 })
+        
+        const tweets = bookmark
+            .filter(b => b.tweet)
+            .map(b => b.tweet)
+
+        res.json(tweets)
+    } catch (error) {
+        console.error('Error obteniendo Bookmark:', error)
+        res.status(500).json({ message: 'Error en el servidor' })
+    }
+}
 const checkBookmark = async ()=>{}
 
 
