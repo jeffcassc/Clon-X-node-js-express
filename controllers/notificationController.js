@@ -15,8 +15,24 @@ const createNotification = async (recipientId, senderId, type, tweetId = null)=>
     }
 }
 
-const getNotifications = ()=>{}
-const markAsRead = ()=>{}
+const getNotifications = async (req,res)=>{
+    try {
+        const notifications = await Notification.find({ recipient: req.user._id })
+            .populate('sender','username displayName avatar')
+            .populate('tweet', 'content')
+            .sort({ createdAt: -1 })
+            .limit(50)
+
+        res.json(notifications)
+
+    } catch (error) {
+        console.error('Error obteniedo notificaciones:', error)
+        res.status(500).json({ message: 'Error en el servidor' })
+    }
+}
+const markAsRead = async (req,res)=>{
+    
+}
 const getUnreadCount = ()=>{}
 
 
