@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import { createNotification } from "./notificationController.js";
 
 const getUserProfile = async (req,res)=>{
     try {
@@ -91,6 +92,12 @@ const followUser = async (req,res)=>{
         userToFollow.followers.push(req.user._id)
         await userToFollow.save()
 
+        await createNotification(
+            userToFollow._id,
+            req.user._id,
+            'follow'
+        )
+
         res.json({
             message: 'Usuario seguido exitosamente',
             following: currentUser.following.length
@@ -123,7 +130,7 @@ const unFollowUser = async (req,res)=>{
         )
         await currentUser.save()
 
-        userToFollow.followers = userToFollow.followers.filter(
+        userToFollow.followers = userToFollow.following.filter(
             id => id.toString() !== req.user._id.toString()
         )
         await userToFollow.save()

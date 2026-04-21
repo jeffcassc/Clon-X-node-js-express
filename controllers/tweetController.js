@@ -1,4 +1,5 @@
 import Tweet from "../models/Tweet.js";
+import { createNotification } from "./notificationController.js";
 
 const createTweet = async (req,res)=>{
     try {
@@ -124,6 +125,13 @@ const toggleLike = async (req,res)=>{
             tweet.likes.splice(likeIndex, 1)
         }else{
             tweet.likes.push(req.user._id)
+
+            await createNotification(
+                tweet.author,
+                req.user._id,
+                'like',
+                tweet._id
+            )
         }
 
         await tweet.save()
@@ -159,6 +167,13 @@ const addComment = async (req,res)=>{
 
         tweet.comments.push(comment)
         await tweet.save()
+
+        await createNotification(
+            tweet.author,
+            req.user._id,
+            'comment',
+            tweet._id
+        )
 
         await tweet.populate('comments.user', 'username displayName avatar')
         res.status(201).json(tweet.comments)
