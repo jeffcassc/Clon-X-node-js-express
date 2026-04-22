@@ -5,6 +5,7 @@ import authRoutes from "./routes/authRoutes.js"
 import userRoutes from './routes/userRoutes.js'
 import tweetRoutes from './routes/tweetRoutes.js'
 import bookmarkRoutes from './routes/bookmarkRoutes.js'
+import notificationRoutes from './routes/notificationRoutes.js'
 
 dotenv.config()
 const app = express()
@@ -29,6 +30,7 @@ app.use('/api/auth', authRoutes)
 app.use('/api/user', userRoutes)
 app.use('/api/tweets', tweetRoutes)
 app.use('/api/bookmark', bookmarkRoutes)
+app.use('/api/notifications', notificationRoutes)
 
 app.listen(PORT, () => {
     console.log(`

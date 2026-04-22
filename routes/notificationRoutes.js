@@ -7,3 +7,5 @@ const router = express.Router()
 
 router.get('/', protect, getNotifications)
 router.put/('/read', protect, markAsRead)
+
+export default router
