@@ -1,6 +1,6 @@
 #  Twitter Clone - MERN Stack
 
-Un clon de Twitter/X construido con MERN Stack para practicar desarrollo fullstack.
+Un clon de Twitter/X construido con MERN Stack y MVC.
 
 ##  Características
 

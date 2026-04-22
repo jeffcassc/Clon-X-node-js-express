@@ -31,7 +31,16 @@ const getNotifications = async (req,res)=>{
     }
 }
 const markAsRead = async (req,res)=>{
-    
+    try {
+        await Notification.updateMany(
+            { recipient: req.user._id, read: false },
+            { read: true }
+        )
+        res.json({ message: 'Notificaciones marcadas como leídas' })
+    } catch (error) {
+        console.error('Error marcando notificaciones:', error)
+        res.status(500).json({ message: 'Error en el servidor' })
+    }
 }
 const getUnreadCount = ()=>{}
 
