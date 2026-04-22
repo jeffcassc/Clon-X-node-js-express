@@ -42,7 +42,19 @@ const markAsRead = async (req,res)=>{
         res.status(500).json({ message: 'Error en el servidor' })
     }
 }
-const getUnreadCount = ()=>{}
+const getUnreadCount = async (req,res)=>{
+    try {
+        const count = await Notification.countDocuments(
+            { recipient: req.user._id, read: false },
+            { read: true }
+        )
+
+        res.json({count})
+    } catch (error) {
+        console.error('Error contando notificaciones:', error)
+        res.status(500).json({ message: 'Error en el servidor' })
+    }
+}
 
 
 export { getNotifications, markAsRead, getUnreadCount, createNotification };
