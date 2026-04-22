@@ -21,7 +21,14 @@ const PORT = process.env.PORT
 
 app.get('/', (req,res)=>{
     res.json({
-        message:'servidor funcionando'
+        message:'Backend Clon Twitter/X: servidor funcionando',
+        endpoints: {
+            auth: '/api/auth',
+            users: '/api/users',
+            tweets: '/api/tweets',
+            bookmarks: '/api/bookmarks',
+            notifications: '/api/notifications'
+        }
     })
 })
 
