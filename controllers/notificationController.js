@@ -45,7 +45,7 @@ const markAsRead = async (req,res)=>{
 const getUnreadCount = async (req,res)=>{
     try {
         const count = await Notification.countDocuments(
-            { recipient: req.user._id, read: false },
+            { recipient: req.user._id },
             { read: true }
         )
 

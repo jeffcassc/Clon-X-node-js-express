@@ -125,12 +125,12 @@ const unFollowUser = async (req,res)=>{
             })
         }
 
-        currentUser.following = currentUser.followers.filter(
+        currentUser.following = currentUser.following.filter(
             id => id.toString() !== req.params.id
         )
         await currentUser.save()
 
-        userToFollow.followers = userToFollow.following.filter(
+        userToFollow.followers = userToFollow.followers.filter(
             id => id.toString() !== req.user._id.toString()
         )
         await userToFollow.save()

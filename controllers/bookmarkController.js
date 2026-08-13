@@ -1,4 +1,4 @@
-import Bookmark from "../models/BookMark.js";
+import Bookmark from "../models/Bookmark.js";
 import Tweet from "../models/Tweet.js";
 
 const toggleBookmark = async (req,res)=>{

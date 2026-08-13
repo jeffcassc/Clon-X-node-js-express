@@ -6,7 +6,7 @@ import { protect } from '../middleware/authmiddleware.js'
 const router = express.Router()
 
 router.get('/', protect, getNotifications)
-router.put/('/read', protect, markAsRead)
+router.put('/read', protect, markAsRead)
 router.get('/unread-count', protect, getUnreadCount)
 
 export default router
